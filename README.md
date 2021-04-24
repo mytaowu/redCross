@@ -32,7 +32,8 @@ npm run lint
 
 页面：
 登录界面：
-![](README_md_files%5Cimage%20%282%29.png?v=1&type=image)
+![image](https://user-images.githubusercontent.com/83112491/115952975-99533800-a51b-11eb-8569-bd737ef29a4c.png)
+
 默认登录密码和账号都是1234678
 
 ![](README_md_files%5Cimage%20%283%29.png?v=1&type=image)
