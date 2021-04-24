@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.red.mapper.ReceivingMoneyDonationMapper" >
+  <resultMap id="BaseResultMap" type="com.red.entity.ReceivingMoneyDonation" >
+    <id column="receiving_money_donation_id" property="receivingMoneyDonationId" jdbcType="INTEGER" />
+    <result column="receiving_money_donation_amount" property="receivingMoneyDonationAmount" jdbcType="INTEGER" />
+    <result column="receiving_money_donation_company" property="receivingMoneyDonationCompany" jdbcType="VARCHAR" />
+    <result column="receiving_money_donation_time" property="receivingMoneyDonationTime" jdbcType="TIMESTAMP" />
+    <result column="receiving_money_donation_add" property="receivingMoneyDonationAdd" jdbcType="VARCHAR" />
+    <result column="receiving_money_donation_contact" property="receivingMoneyDonationContact" jdbcType="VARCHAR" />
+    <result column="receiving_money_donation_tel" property="receivingMoneyDonationTel" jdbcType="VARCHAR" />
+    <result column="receiving_money_donation_mail" property="receivingMoneyDonationMail" jdbcType="VARCHAR" />
+    <result column="receiving_money_donation_imag" property="receivingMoneyDonationImag" jdbcType="VARCHAR" />
+    <result column="receiving_money_donation_other_explain" property="receivingMoneyDonationOtherExplain" jdbcType="VARCHAR" />
+  </resultMap>
+<!--  List<ReceivingMoneyDonation> seachReceivingMoneyDonationList(String keyword);-->
+  <select id="seachReceivingMoneyDonationList" resultMap="BaseResultMap" parameterType="string">
+    select  * from receiving_money_donation where
+    receiving_money_donation.receiving_money_donation_company LIKE '%${keyword}%'
+        OR receiving_money_donation.receiving_money_donation_add LIKE '%${keyword}%'
+        OR receiving_money_donation.receiving_money_donation_contact LIKE '%${keyword}%'
+        OR receiving_money_donation.receiving_money_donation_tel LIKE '%${keyword}%'
+        OR receiving_money_donation.receiving_money_donation_mail LIKE '%${keyword}%'
+        OR receiving_money_donation.receiving_money_donation_other_explain LIKE '%${keyword}%'
+    ORDER BY
+        receiving_money_donation.receiving_money_donation_id DESC
+  </select>
+</mapper>

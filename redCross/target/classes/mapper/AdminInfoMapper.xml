@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.red.mapper.AdminInfoMapper" >
+
+  <resultMap id="BaseResultMap" type="com.red.entity.AdminInfo" >
+    <id column="admin_info_id" property="adminInfoId" jdbcType="INTEGER" />
+    <result column="admin_info_name" property="adminInfoName" jdbcType="VARCHAR" />
+    <result column="admin_info_tel" property="adminInfoTel" jdbcType="DECIMAL" />
+    <result column="admin_info_login_name" property="adminInfoLoginName" jdbcType="VARCHAR" />
+    <result column="admin_info_pass" property="adminInfoPass" jdbcType="VARCHAR" />
+    <result column="admin_prohibit" property="adminProhibit" jdbcType="DECIMAL" />
+    <result column="is_top_admin" property="isTopAdmin" jdbcType="DECIMAL" />
+  </resultMap>
+
+
+<!--  void modifyUserPass(String adminInfoLoginName, String password);-->
+  <update id="modifyUserPass">
+    update admin_info set admin_info_pass = #{password} where admin_info_login_name = #{adminInfoLoginName}
+  </update>
+
+<!--  void resetUserPass(String defaultPassword, Integer adminInfoId);-->
+  <update id="resetUserPass">
+    update admin_info set admin_info_pass = #{defaultPassword} where admin_info_id = #{adminInfoId}
+  </update>
+
+<!--  List<AdminInfo> seacProhibitUserInfo(String keyWord);-->
+  <select id="seacProhibitUserInfo" resultMap="BaseResultMap" parameterType="string">
+    select  * from admin_info where
+    (admin_info.admin_info_name LIKE '%${keyword}%'
+        OR admin_info.admin_info_tel LIKE '%${keyword}%'
+        OR admin_info.admin_info_login_name LIKE '%${keyword}%')
+        and admin_info.admin_prohibit = 1 and admin_info.is_top_admin = 0
+    ORDER BY
+        admin_info.admin_info_id DESC
+  </select>
+
+<!--  List<AdminInfo> seachAllUserInfo(String keyWord);-->
+  <select id="seachAllUserInfo" resultMap="BaseResultMap" parameterType="string">
+    select  * from admin_info where
+    (admin_info.admin_info_name LIKE '%${keyword}%'
+        OR admin_info.admin_info_tel LIKE '%${keyword}%'
+        OR admin_info.admin_info_login_name LIKE '%${keyword}%')
+        and admin_info.admin_prohibit = 0 and admin_info.is_top_admin = 0
+    ORDER BY
+        admin_info.admin_info_id DESC
+  </select>
+
+
+<!--    void userProhibit(@Param("adminInfoId") Integer adminInfoId);-->
+    <update id="userProhibit">
+        update admin_info set admin_prohibit = 1 where admin_info_id = #{adminInfoId}
+    </update>
+
+<!--    void userNoProhibit(@Param("adminInfoId") Integer adminInfoId);-->
+    <update id="userNoProhibit">
+        update admin_info set admin_prohibit = 0 where admin_info_id = #{adminInfoId}
+    </update>
+
+<!--    Integer getTotalDonationGoodsCount();-->
+    <select id="getTotalDonationGoodsCount" resultType="int">
+        select count(*) from donation_goods
+    </select>
+
+<!--    Integer getTotalDonationGoodsMoney();-->
+    <select id="getTotalDonationGoodsMoney" resultType="int">
+        select sum(donation_goods.donation_good_total_value) from donation_goods
+    </select>
+
+<!--    Integer getTotalDonationMoney();-->
+    <select id="getTotalDonationMoney" resultType="int">
+        select sum(donation_money.donation_money_amount) from donation_money
+    </select>
+
+<!--    Integer getTotalReceivingDonationGoodsCount();-->
+    <select id="getTotalReceivingDonationGoodsCount" resultType="int">
+        select count(*) from receiving_good_donation
+    </select>
+
+<!--    Integer getTotalRecevingDonationMoneyCount();-->
+    <select id="getTotalRecevingDonationMoneyCount" resultType="int">
+        select count(*) from receiving_money_donation
+    </select>
+
+
+<!--    Integer getTotalMoney();-->
+    <select id="getTotalMoney" resultType="int">
+        (SELECT sum( donation_money.donation_money_amount )-
+        (SELECT sum( receiving_money_donation.receiving_money_donation_amount )
+        FROM receiving_money_donation)
+        FROM donation_money )
+    </select>
+</mapper>

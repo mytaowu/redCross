@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.red.mapper.DonationGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.red.entity.DonationGoods" >
+    <id column="donation_id" property="donationId" jdbcType="INTEGER" />
+    <result column="donation_company" property="donationCompany" jdbcType="VARCHAR" />
+    <result column="donation_time" property="donationTime" jdbcType="TIMESTAMP" />
+    <result column="donation_add" property="donationAdd" jdbcType="VARCHAR" />
+    <result column="donation_contact" property="donationContact" jdbcType="VARCHAR" />
+    <result column="donation_tel" property="donationTel" jdbcType="VARCHAR" />
+    <result column="donation_mail" property="donationMail" jdbcType="VARCHAR" />
+    <result column="donation_good" property="donationGood" jdbcType="VARCHAR" />
+    <result column="donation_good_model" property="donationGoodModel" jdbcType="VARCHAR" />
+    <result column="donation_good_unit" property="donationGoodUnit" jdbcType="VARCHAR" />
+    <result column="donation_good_count" property="donationGoodCount" jdbcType="INTEGER" />
+    <result column="donation_good_total_value" property="donationGoodTotalValue" jdbcType="INTEGER" />
+    <result column="donation_purpose_id" property="donationPurposeId" jdbcType="INTEGER" />
+    <result column="donation_type_id" property="donationTypeId" jdbcType="INTEGER" />
+    <result column="donation_is_secrecy" property="donationIsSecrecy" jdbcType="DECIMAL" />
+    <result column="donation_is_large_money" property="donationIsLargeMoney" jdbcType="DECIMAL" />
+    <result column="donation_other_explain" property="donationOtherExplain" jdbcType="VARCHAR" />
+    <result column="donation_good_surplus_count" property="donationGoodSurplusCount" jdbcType="INTEGER" />
+  </resultMap>
+
+
+  <resultMap id="DetailInfoResultMap" type="com.red.entity.GoodDetailInfo" >
+    <result column="donation_company" property="donationCompany" jdbcType="VARCHAR" />
+    <result column="donation_good" property="donationGood" jdbcType="VARCHAR" />
+    <result column="donation_contact" property="donationContact" jdbcType="VARCHAR" />
+    <result column="donation_tel" property="donationTel" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_company" property="receivingGoodDonationCompany" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_time" property="receivingGoodDonationTime" jdbcType="TIMESTAMP" />
+    <result column="receiving_good_donation_contact" property="receivingGoodDonationContact" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_tel" property="receivingGoodDonationTel" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_good_count" property="receivingGoodDonationGoodCount" jdbcType="INTEGER" />
+  </resultMap>
+<!--  void downStock(Integer donationId, Integer count);-->
+  <update id="downStock">
+    update donation_goods set donation_good_surplus_count = donation_good_surplus_count - #{count} where donation_good_surplus_count - #{count} >= 0 and donation_id = #{donationId}
+  </update>
+
+<!--  void upStock(Integer donationId, Integer count);-->
+  <update id="upStock">
+    update donation_goods set donation_good_surplus_count = donation_good_surplus_count + #{count} where (donation_good_surplus_count + #{count} Between 0 and donation_good_count) and donation_id = #{donationId}
+  </update>
+
+<!--  List<DonationGoods> getDonationGoodList(String keyword);-->
+  <select id="getDonationGoodList" parameterType="string" resultMap="BaseResultMap">
+    select  * from donation_goods where
+    (donation_goods.donation_company LIKE '%${keyword}%'
+        OR donation_goods.donation_add LIKE '%${keyword}%'
+        OR donation_goods.donation_contact LIKE '%${keyword}%'
+        OR donation_goods.donation_tel LIKE '%${keyword}%'
+        OR donation_goods.donation_mail LIKE '%${keyword}%'
+        OR donation_goods.donation_good LIKE '%${keyword}%'
+        OR donation_goods.donation_other_explain LIKE '%${keyword}%')
+    ORDER BY
+        donation_goods.donation_id DESC
+  </select>
+
+<!--  List<GoodDetailInfo> donationGoodDetailInfo(@Param("donationGoodId")Integer donationGoodId);-->
+  <select id="donationGoodDetailInfo" resultMap="DetailInfoResultMap">
+    SELECT
+      donation_goods.donation_company,
+      donation_goods.donation_good,
+      donation_goods.donation_contact,
+      donation_goods.donation_tel,
+      receiving_good_donation.receiving_good_donation_company,
+      receiving_good_donation.receiving_good_donation_time,
+      receiving_good_donation.receiving_good_donation_contact,
+      receiving_good_donation.receiving_good_donation_tel,
+      receiving_good_donation.receiving_good_donation_good_count
+    FROM
+	    donation_goods
+	JOIN receiving_good_donation ON donation_goods.donation_id = receiving_good_donation.donation_id
+	where donation_goods.donation_id = #{donationGoodId}
+  </select>
+
+
+</mapper>

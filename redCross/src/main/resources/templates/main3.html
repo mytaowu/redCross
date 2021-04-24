@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>后端系统主界面</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/icon.css">
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="js/jquery.form.min.js"></script>
+
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.easyui.min.js">
+    </script>
+    <style>
+        .inner-li{
+            margin: 15px 0;
+        }
+        .inner-li a{
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body class="easyui-layout">
+<div data-options="region:'north',title:'南京大学助学金管理系统',split:true" style="height:100px;">
+    <img src="/images/logo.png" alt="" style="height: 100%;">
+</div>
+<div data-options="region:'west',title:'选项卡',split:true" style="width:200px;">
+    <div class="easyui-accordion" style="width:100%;height:100%;">
+
+        <div title="辅导员信息管理" data-options="iconCls:'icon-man'" style="padding:10px;">
+            <li class="inner-li"><a href="javascript:teacherInfoManager();">辅导员信息管理</a></li>
+        </div>
+        <div title="消息的发布及管理" data-options="iconCls:'icon-man'" style="padding:10px;">
+            <li class="inner-li"><a href="javascript:schoolInformationManager();">消息的发布及管理</a></li>
+        </div>
+        <div title="审核通过信息" data-options="iconCls:'icon-man'" style="padding:10px;">
+            <li class="inner-li"><a href="javascript:finalPovertyIdentification();">最终的贫困申请名单</a></li>
+            <li class="inner-li"><a href="javascript:finalGrantAapplication();">最终的助学金名单</a></li>
+        </div>
+        <div title="个人信息管理" data-options="iconCls:'icon-man'" style="padding:10px;">
+            <li class="inner-li"><a href="javascript:adminMidityPassWord();">修改密码</a></li>
+        </div>
+    </div>
+
+</div>
+<div data-options="region:'center',title:'中心面板'" style="padding:5px;background:#eee;">
+    <div id="tt" class="easyui-tabs" style="width:100%;height:100%;">
+        <h1>助学金管理系统</h1>
+    </div>
+</div>
+
+<div id="tab-tools">
+    <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-mini_edit">修改</a>
+</div>
+
+
+<script>
+
+    var userNum = 201310804085;
+
+    function adminMidityPassWord() {
+        var flag = $("#tt").tabs('exists','管理员修改密码');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '管理员修改密码',
+                closable: true,
+                href: "/adminMidityPassWord",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','管理员修改密码');
+        }
+        return false;
+    }
+
+    function teacherMidityPassWord() {
+        var flag = $("#tt").tabs('exists','辅导员修改密码');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '辅导员修改密码',
+                closable: true,
+                href: "/teacherMidityPassWord",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','辅导员修改密码');
+        }
+        return false;
+    }
+
+    function userMidityPassWord() {
+        var flag = $("#tt").tabs('exists','学生修改密码');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '学生修改密码',
+                closable: true,
+                href: "/userMidityPassWord",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','学生修改密码');
+        }
+        return false;
+    }
+
+    function finalGrantAapplication() {
+        var flag = $("#tt").tabs('exists','最终的助学金名单');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '最终的助学金名单',
+                closable: true,
+                href: "/finalGrantAapplication",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','最终的助学金名单');
+        }
+        return false;
+    }
+
+    function finalPovertyIdentification() {
+        var flag = $("#tt").tabs('exists','最终的贫困申请名单');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '最终的贫困申请名单',
+                closable: true,
+                href: "/finalPovertyIdentification",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','最终的贫困申请名单');
+        }
+        return false;
+    }
+
+    function schoolInformationManager() {
+        var flag = $("#tt").tabs('exists','学校信息管理');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '学校信息管理',
+                closable: true,
+                href: "/schoolInformationManager",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','学校信息管理');
+        }
+        return false;
+    }
+
+    function teacherInfoManager() {
+        var flag = $("#tt").tabs('exists','辅导员信息管理');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '辅导员信息管理',
+                closable: true,
+                href: "/teacherInfoManager",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','辅导员信息管理');
+        }
+        return false;
+    }
+
+    function schoolInformationNotice() {
+        var flag = $("#tt").tabs('exists','学校消息通知');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '学校消息通知',
+                closable: true,
+                href: "/schoolInformationNotice",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','学校消息通知');
+        }
+        return false;
+    }
+
+    function yesGrantAapplication() {
+        var flag = $("#tt").tabs('exists','已审核的助学金申请');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '已审核的助学金申请',
+                closable: true,
+                href: "/yesGrantAapplication",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','已审核的助学金申请');
+        }
+        return false;
+    }
+
+    function yesPovertyIdentification() {
+        var flag = $("#tt").tabs('exists','已审核的贫困生认定');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '已审核的贫困生认定',
+                closable: true,
+                href: "/yesPovertyIdentification",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','已审核的贫困生认定');
+        }
+        return false;
+    }
+
+
+    function noGrantAapplication() {
+        var flag = $("#tt").tabs('exists','待审核的助学金申请');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '待审核的助学金申请',
+                closable: true,
+                href: "/noGrantAapplication",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','待审核的助学金申请');
+        }
+        return false;
+    }
+
+    function noPovertyIdentification() {
+        var flag = $("#tt").tabs('exists','待审核的贫困生认定');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '待审核的贫困生认定',
+                closable: true,
+                href: "/noPovertyIdentification",
+            });
+        }else {
+            var flag = $("#tt").tabs('select','待审核的贫困生认定');
+        }
+        return false;
+    }
+
+    function userInfoManager() {
+        var flag = $("#tt").tabs('exists','学生信息管理');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '学生信息管理',
+                closable: true,
+                href: "/getUserInfoManager"
+            });
+        }else {
+            $("#tt").tabs('select','学生信息管理');
+        }
+
+        return false;
+    }
+
+    function myFamilyInfo() {
+        var flag = $("#tt").tabs('exists','我的家庭信息');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '我的家庭信息',
+                content: 'Tab Body',
+                closable: true,
+                href: "/familyInfo/"+userNum,
+            });
+        }else {
+            $("#tt").tabs('select','我的家庭信息');
+        }
+
+        return false;
+    }
+
+    //我的基本信息;
+    function myBasicInfo() {
+        var flag = $("#tt").tabs('exists','我的基本信息');
+        if (!flag){
+            $('#tt').tabs('add',{
+                title:'我的基本信息',
+                closable:true,
+                href: "/infomation/"+userNum,
+            });
+        }else {
+            $("#tt").tabs('select','我的基本信息');
+        }
+
+        return false;
+    }
+
+    //我的贫困认定
+    function myPovertyIdentification(){
+        var flag = $("#tt").tabs('exists','我的贫困认定');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '我的贫困认定',
+                closable: true,
+                href: "/povertyIdentification/"+userNum,
+            });
+        }else {
+            var flag = $("#tt").tabs('select','我的贫困认定');
+        }
+        return false;
+    }
+
+    function myGrantAapplication(){
+        var flag = $("#tt").tabs('exists','我的助学金申请');
+        if (!flag) {
+            $('#tt').tabs('add', {
+                title: '我的助学金申请',
+                closable: true,
+                href: "/grantAapplication/"+userNum,
+            });
+        }else {
+            var flag = $("#tt").tabs('select','我的助学金申请');
+
+        }
+        return false;
+    }
+
+
+    function grantAapplication() {
+        $.get("get/user/grant/applicaton/authentication/"+userNum,function (res) {
+            if (res.result == "FAILED"){
+                alert(res.message);
+            }else {
+                var flag = $("#tt").tabs('exists','添加助学金申请');
+                if (!flag) {
+                    $('#tt').tabs('add', {
+                        title: '添加助学金申请',
+                        closable: true,
+                        href: "/add/grant/gapplication/"+userNum,
+                    });
+                }else {
+                    var flag = $("#tt").tabs('select','添加助学金申请');
+                }
+                return false;
+            }
+        })
+    }
+
+    function povertyIdentification(){
+        $.get("get/user/poverty/identification/authentication/"+userNum,function (res) {
+            if (res.result == "FAILED"){
+                alert(res.message);
+            }else {
+                var flag = $("#tt").tabs('exists','添加贫困生认定');
+                if (!flag) {
+                    $('#tt').tabs('add', {
+                        title: '添加贫困生认定',
+                        closable: true,
+                        href: "/add/poverty/gappliidentificationcation/"+userNum,
+                    });
+                }else {
+                    var flag = $("#tt").tabs('select','添加贫困生认定');
+                }
+                return false;
+            }
+        })
+    }
+
+    $(function () {
+
+
+    })
+</script>
+</body>
+</html>

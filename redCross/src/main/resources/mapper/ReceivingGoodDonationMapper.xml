@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.red.mapper.ReceivingGoodDonationMapper" >
+  <resultMap id="BaseResultMap" type="com.red.entity.ReceivingGoodDonation" >
+    <id column="receiving_good_donation_id" property="receivingGoodDonationId" jdbcType="INTEGER" />
+    <result column="donation_id" property="donationId" jdbcType="INTEGER" />
+    <result column="receiving_good_donation_company" property="receivingGoodDonationCompany" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_time" property="receivingGoodDonationTime" jdbcType="TIMESTAMP" />
+    <result column="receiving_good_donation_add" property="receivingGoodDonationAdd" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_contact" property="receivingGoodDonationContact" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_tel" property="receivingGoodDonationTel" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_mail" property="receivingGoodDonationMail" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_good_count" property="receivingGoodDonationGoodCount" jdbcType="INTEGER" />
+    <result column="receiving_good_donation_good_total_value" property="receivingGoodDonationGoodTotalValue" jdbcType="INTEGER" />
+    <result column="receiving_good_donation_imag" property="receivingGoodDonationImag" jdbcType="VARCHAR" />
+    <result column="receiving_good_donation_other_explain" property="receivingGoodDonationOtherExplain" jdbcType="VARCHAR" />
+      <association property="donationGoods" javaType="com.red.entity.DonationGoods">
+          <id column="donation_id" property="donationId" jdbcType="INTEGER" />
+          <result column="donation_company" property="donationCompany" jdbcType="VARCHAR" />
+          <result column="donation_time" property="donationTime" jdbcType="TIMESTAMP" />
+          <result column="donation_add" property="donationAdd" jdbcType="VARCHAR" />
+          <result column="donation_contact" property="donationContact" jdbcType="VARCHAR" />
+          <result column="donation_tel" property="donationTel" jdbcType="VARCHAR" />
+          <result column="donation_mail" property="donationMail" jdbcType="VARCHAR" />
+          <result column="donation_good" property="donationGood" jdbcType="VARCHAR" />
+          <result column="donation_good_model" property="donationGoodModel" jdbcType="VARCHAR" />
+          <result column="donation_good_unit" property="donationGoodUnit" jdbcType="VARCHAR" />
+          <result column="donation_good_count" property="donationGoodCount" jdbcType="INTEGER" />
+          <result column="donation_good_total_value" property="donationGoodTotalValue" jdbcType="INTEGER" />
+          <result column="donation_purpose_id" property="donationPurposeId" jdbcType="INTEGER" />
+          <result column="donation_type_id" property="donationTypeId" jdbcType="INTEGER" />
+          <result column="donation_is_secrecy" property="donationIsSecrecy" jdbcType="DECIMAL" />
+          <result column="donation_is_large_money" property="donationIsLargeMoney" jdbcType="DECIMAL" />
+          <result column="donation_other_explain" property="donationOtherExplain" jdbcType="VARCHAR" />
+          <result column="donation_good_surplus_count" property="donationGoodSurplusCount" jdbcType="INTEGER" />
+      </association>
+  </resultMap>
+
+<!--  List<ReceivingGoodDonation> receivingGoodDonationList(String keyword);-->
+  <select id="receivingGoodDonationList" resultMap="BaseResultMap" parameterType="string">
+    select  * from receiving_good_donation left join donation_goods on receiving_good_donation.donation_id = donation_goods.donation_id where
+    receiving_good_donation.receiving_good_donation_company LIKE '%${keyword}%'
+        OR receiving_good_donation.receiving_good_donation_add LIKE '%${keyword}%'
+        OR receiving_good_donation.receiving_good_donation_contact LIKE '%${keyword}%'
+        OR receiving_good_donation.receiving_good_donation_tel LIKE '%${keyword}%'
+        OR receiving_good_donation.receiving_good_donation_mail LIKE '%${keyword}%'
+        OR receiving_good_donation.receiving_good_donation_other_explain LIKE '%${keyword}%'
+    ORDER BY
+        receiving_good_donation.receiving_good_donation_id DESC
+  </select>
+
+
+</mapper>

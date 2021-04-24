@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>学校的消息的管理</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/icon.css">
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="js/jquery.form.min.js">
+    </script>
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.easyui.min.js">
+    </script>
+
+</head>
+<body>
+<div id="schoolInformationNoticeManagerDiv" class="easyui-tabs" style="width:100%;height:100%;">
+    <div title="学校的消息通知" style="padding:20px;display:none;">
+        <table id="schoolInformationNoticeManager" class="easyui-datagrid" style="width: 100%">
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="tber">
+    <a id="addNewsInfo"  class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">增加消息</a>
+</div>
+
+
+<div id="notice"></div>
+
+<script>
+
+    window.newsInner = [];
+
+    $(function () {
+        $('#schoolInformationNoticeManager').datagrid({
+            title: '学校的消息通知',
+            url: '/teacher/show/news/info',
+            iconCls: 'icon-edit',  //图标
+            height: 'auto',   //表格高度，可指定高度，可自动
+            border: true,  //表格是否显示边框
+            pagination: true,//如果表格需要支持分页，必须设置该选项为true
+            pageSize: 5,   //表格中每页显示的行数
+            pageList: [5, 10, 15],
+            rownumbers: true,   //是否显示行号
+            nowrap: false,
+            striped: true,  //奇偶行是否使用不同的颜色
+            method: 'get',   //表格数据获取方式,请求地址是上面定义的url
+            singleSelect: true,
+            columns: [[
+                {field: 'newsTitle', title: '消息标题', width: 300},
+                {field: 'newsTime', title: '消息时间', width: 150},
+                {field: 'adminNum', title: '发布者账号', width: 150},
+                {field: 'adminName', title: '发布者姓名', width: 150},
+                {
+                    field: 'operate', title: '查看内容', align: 'center', width: $(this).width() * 0.1,
+                    formatter: function (value, row, index) {
+                        newsInner[index] = row.newsInner
+                        var str = '<a href="javascript:showInner(' + index + ');"  name="opera" class="easyui-linkbutton" style="margin-right: 10px"  data-options="iconCls:icon-no" >查看详情</a><a href="javascript:deleteInfo(' + row.newsId + ');"  name="opera" class="easyui-linkbutton" style="margin-right: 10px"  data-options="iconCls:icon-no" >删除消息</a>';
+                        return str;
+                    }
+                }
+            ]],
+        });
+        $('#schoolInformationNoticeManager').datagrid({
+            toolbar: '#tber'
+        });
+
+        $("#addNewsInfo").click(function () {
+            addNewsInfo();
+        });
+    })
+
+    function addNewsInfo() {
+        console.log("进入添加信息的页面！");
+        $('#notice').window({
+            href:"/add/news/info",
+            width:600,
+            height:400,
+            title: '添加消息信息',
+            modal:true,
+            //window的关闭事件;
+            onBeforeClose:function(){
+                $('#schoolInformationNoticeManager').datagrid('reload');
+            }
+        });
+    }
+
+    function deleteInfo(newsId) {
+        $.messager.confirm('提示框', '确认要删除该信息吗？',function(r){
+            if (r){
+                $.get("/admin/delete/news",{"newsId":newsId},function (res) {
+                    alert(res.message);
+                    $('#schoolInformationNoticeManager').datagrid('reload');
+                })
+            }
+        });
+        return false;
+    }
+
+    function showInner(index) {
+        $.messager.alert('具体的消息内容',newsInner[index]);
+        return false;
+    }
+
+</script>
+</body>
+</html>

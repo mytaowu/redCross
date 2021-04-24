@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>家庭信息的管理</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/icon.css">
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="js/jquery.form.min.js">
+    </script>
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.easyui.min.js">
+    </script>
+    <STYLE>
+        input{
+            border: 0;
+            border: 1px solid #cccccc;
+        }
+    </STYLE>
+
+</head>
+<body>
+<form id="familyInfoForm" method="post" action="user/modify">
+    <div class="inner" style="text-align: center">
+        <div style="margin: 20px 0";>
+            <label>姓名:</label>
+            <input readonly required th:value="${userFamilyInfo.getUserName()}"  name="userName" class="easyui-validatebox" data-options="validType:'chinese'"
+                    style="width:300px">
+        </div>
+        <div style="margin: 20px 0;">
+            <label>学号:</label>
+            <input readonly required th:value="${userFamilyInfo.getUserNum()}"  name="userNum" class="easyui-validatebox" data-options="validType:'integer'"
+                    style="width:300px">
+        </div>
+        <div style="margin: 20px 0;">
+
+            <label>家庭人数:</label>
+            <input required th:value="${userFamilyInfo.getUserFamilyNum()}"  name="userFamilyNum" class="easyui-validatebox" data-options="validType:'integer'"
+                   style="width:300px">
+            <br>
+        </div>
+        <div style="margin: 20px 0;">
+            <label>家庭地址:</label>
+            <input required  th:value="${userFamilyInfo.getUserFamilyAdd()}"  name="userFamilyAdd" class="easyui-validatebox" data-options="validType:'mobile'"
+                   style="width:300px">
+        </div>
+        <div style="margin: 20px 0;">
+            <label>家庭描述:</label>
+<!--            <input required th:value="${userFamilyInfo.getUserFamilyDescribe()}" name="userFamilyDescribe" class="easyui-validatebox" data-options="validType:'chinese'"-->
+<!--                   style="width:300px;height: 100px;">-->
+            <textarea rows="10" cols="38" required th:text="${userFamilyInfo.getUserFamilyDescribe()}" name="userFamilyDescribe" class="easyui-validatebox" data-options="validType:'chinese'"/>
+
+            <br></div>
+        <div style="margin: 20px 0;"><label>家庭电话:</label>
+            <input required th:value="${userFamilyInfo.getUserFamilyTel()}" name="userFamilyTel" class="easyui-validatebox" data-options="validType:'integer'"
+                   style="width:300px"></div>
+        <input type="hidden" name = "userFamilyId" th:value="${userFamilyInfo.getUserFamilyId()}">
+        <input  id="familyInfoSubmit" type="button"  value="提交更新">
+
+    </div>
+</form>
+
+<script>
+    $(function () {
+        // $("#ff").ajaxForm(function (data) {
+        //     console.log(data);
+        //     console.log("str:" + JSON.stringify(data));
+        // });
+
+        //发送表单ajax请求
+        $('#familyInfoSubmit').on('click',function() {
+            $.ajax({
+                url: "/user/modity/familyInfo",
+                type: "POST",
+                data: JSON.stringify($('#familyInfoForm').serializeObject()),
+                contentType: "application/json",  //缺失会出现URL编码，无法转成json对象
+                success: function (res) {
+                    alert(res.message);
+                    $("#tt").tabs('close','我的家庭信息');
+                }
+            });
+        });
+        /**
+         * 自动将form表单封装成json对象
+         */
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    });
+</script>
+</body>
+</html>

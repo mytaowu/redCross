@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.red.mapper.DonationMoneyMapper" >
+  <resultMap id="BaseResultMap" type="com.red.entity.DonationMoney" >
+    <id column="donation_money_id" property="donationMoneyId" jdbcType="INTEGER" />
+    <result column="donation_money_company" property="donationMoneyCompany" jdbcType="VARCHAR" />
+    <result column="donation_money_time" property="donationMoneyTime" jdbcType="TIMESTAMP" />
+    <result column="donation_money_add" property="donationMoneyAdd" jdbcType="VARCHAR" />
+    <result column="donation_money_contact" property="donationMoneyContact" jdbcType="VARCHAR" />
+    <result column="donation_money_tel" property="donationMoneyTel" jdbcType="VARCHAR" />
+    <result column="donation_money_mail" property="donationMoneyMail" jdbcType="VARCHAR" />
+    <result column="donation_money_amount" property="donationMoneyAmount" jdbcType="INTEGER" />
+    <result column="donation_is_secrecy" property="donationIsSecrecy" jdbcType="DECIMAL" />
+    <result column="donation_is_large_money" property="donationIsLargeMoney" jdbcType="DECIMAL" />
+    <result column="donation_other_explain" property="donationOtherExplain" jdbcType="VARCHAR" />
+  </resultMap>
+
+<!--  List<DonationMoney> getDonationMoneyList(String keyWord);-->
+  <select id="getDonationMoneyList" parameterType="string" resultMap="BaseResultMap">
+    select  * from donation_money where
+    donation_money.donation_money_company LIKE '%${keyword}%'
+        OR donation_money.donation_money_add LIKE '%${keyword}%'
+        OR donation_money.donation_money_contact LIKE '%${keyword}%'
+        OR donation_money.donation_money_tel LIKE '%${keyword}%'
+        OR donation_money.donation_money_mail LIKE '%${keyword}%'
+        OR donation_money.donation_other_explain LIKE '%${keyword}%'
+    ORDER BY
+        donation_money.donation_money_id DESC
+  </select>
+</mapper>

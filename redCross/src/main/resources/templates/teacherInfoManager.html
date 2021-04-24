@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>辅导员信息的管理</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/icon.css">
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="js/jquery.form.min.js">
+    </script>
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.easyui.min.js">
+    </script>
+
+</head>
+<body>
+<div id="teacherInfoMangerDiv" class="easyui-tabs" style="width:100%;height:100%;">
+    <div title="辅导员信息管理界面" style="padding:20px;display:none;">
+        <div id="tb">
+            <a href="javascript:addTeacherInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-man',plain:true">增加</a>
+        </div>
+        <table id="teacherInfoManger" class="easyui-datagrid" style="width: 100%">
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="pp" style="background:#efefef;border:1px solid #ccc;"></div>
+    </div>
+</div>
+
+<div id="win"></div>
+
+<script>
+    $(function () {
+        $('#teacherInfoManger').datagrid({
+            title: '辅导员信息的管理',
+            url:'/teacher/get/all/info',
+            iconCls: 'icon-edit',  //图标
+            height:'auto',   //表格高度，可指定高度，可自动
+            border:true,  //表格是否显示边框
+            pagination:true,//如果表格需要支持分页，必须设置该选项为true
+            pageSize:5,   //表格中每页显示的行数
+            pageList:[5,10,15],
+            rownumbers:true,   //是否显示行号
+            nowrap: false,
+            striped: true,  //奇偶行是否使用不同的颜色
+            method:'get',   //表格数据获取方式,请求地址是上面定义的url
+            singleSelect: true,
+            columns:[[
+                {field:'teacherNum',title:'辅导员编号',width:100},
+                {field:'teacherName',title:'姓名',width:100},
+                {field:'teacherSex',title:'性别',width:100},
+                {field:'teacherTel',title:'电话',width:100},
+                {field:'collegeName',title:'学院',width:150},
+                {field:'operate',title:'操作',align:'center',width:$(this).width()*0.1,
+                    formatter:function(value, row, index){
+                        var str = '<a href="javascript:deleteTeacherInfo('+row.teacherId+');" name="opera" class="easyui-linkbutton" style="margin-right: 10px"  data-options="iconCls:icon-no" >删除</a><a href="javascript:modityTeacherInfo('+row.teacherNum+');" name="opera" class="easyui-linkbutton" data-options="iconCls:icon-edit">修改</a><br/><a href="javascript:resetTeacherInfoPass('+row.teacherId+');" name="opera" class="easyui-linkbutton"  data-options="iconCls:icon-no" >重置密码</a>';
+                        return str;
+                    }}
+            ]],
+        });
+
+
+        $('#dg').datagrid({
+            toolbar: '#tb'
+        });
+    })
+
+    function resetTeacherInfoPass(teacherId) {
+        $.messager.confirm('提示框', '你确定要重置密吗?，默认密码为12345678',function(r){
+            if (r){
+                console.log("进入！");
+                $.get("/teacher/reset/pass",{"teacherId":teacherId},function (res) {
+                    alert(res.message);
+                    $('#teacherInfoManger').datagrid('reload');
+                })
+            }
+        });
+    }
+
+    function addTeacherInfo() {
+        $('#win').window({
+            href:"/add/teacherInfo",
+            width:600,
+            height:400,
+            title: '添加辅导员信息',
+            modal:true,
+            //window的关闭事件;
+            onBeforeClose:function(){
+                $('#teacherInfoManger').datagrid('reload');
+            }
+        });
+    }
+
+
+    function modityTeacherInfo(teacherNum) {
+        $('#win').window({
+            href:"/teacherInfo/"+teacherNum,
+            width:600,
+            height:400,
+            modal:true,
+            title: '修改辅导员信息',
+            //window的关闭事件;
+            onBeforeClose:function(){
+                $('#teacherInfoManger').datagrid('reload');
+            }
+        });
+    }
+
+    function deleteTeacherInfo(teacherId) {
+        $.messager.confirm('提示框', '你确定要删除吗?',function(r){
+            if (r){
+                $.get("/teacher/delete",{"teacherId":teacherId},function (res) {
+                    alert(res.message);
+                    $('#teacherInfoManger').datagrid('reload');
+                })
+            }
+        });
+
+        return false;
+    }
+</script>
+</body>
+</html>

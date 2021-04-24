@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>增加学生的信息</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/icon.css">
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="js/jquery.form.min.js">
+    </script>
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.easyui.min.js">
+    </script>
+
+</head>
+<body>
+<form id="addInfomationForm" method="post" action="user/modify">
+    <div class="inner" style="text-align: center">
+        <div style="margin: 20px 0";>
+            <label>姓名:</label>
+            <input  required  name="userName" class="easyui-validatebox" data-options="validType:'integer'"
+        style="width:300px">
+        </div>
+        <div style="margin: 20px 0;">
+            <label>学号:</label>
+            <input required  name="userNum" class="easyui-validatebox" data-options="validType:'integer'"
+                   style="width:300px">
+            <br>
+        </div>
+        <div style="margin: 20px 0;">
+            <label>密码:</label>
+            <input required  name="userPass" class="easyui-validatebox" data-options="validType:'integer'"
+                   style="width:300px">
+            <br>
+        </div>
+        <div style="margin: 20px 0;">
+            <label>性别:</label>
+            <select  required id="cc" class="easyui-combobox" name="userSex" style="width:200px;">
+                <option value="男">男</option>
+                <option value="女">女</option>
+            </select>
+            <br>
+        </div>
+        <div style="margin: 20px 0;">
+            <label>电话:</label>
+            <input required   name="userTel" class="easyui-validatebox" data-options="validType:'mobile'"
+                   style="width:100px">
+            <br>
+        </div>
+        <div style="margin: 20px 0;">
+            <label>班级:</label>
+            <input required  name="userClass" class="easyui-validatebox" data-options="validType:'chinese'"
+                   style="width:300px">
+            <br></div>
+        <div style="margin: 20px 0;"><label>学院:</label>
+            <input required name="collegeName" class="easyui-validatebox" data-options="validType:'chinese'"
+                   style="width:300px"></div>
+        <input  id="addInfomationSubmit" type="button"  value="确认添加">
+    </div>
+</form>
+
+<script>
+    $(function () {
+
+        $('#addInfomationSubmit').on('click',function() {
+            $.ajax({
+                url: "/user/add",
+                type: "post",
+                data: JSON.stringify($('#addInfomationForm').serializeObject()),
+                contentType: "application/json",  //缺失会出现URL编码，无法转成json对象
+                success: function (res) {
+                    alert(res.message);
+                    $("#tt").tabs('close','我的基本信息');
+                }
+            });
+        });
+        /**
+         * 自动将form表单封装成json对象
+         */
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    });
+</script>
+</body>
+</html>

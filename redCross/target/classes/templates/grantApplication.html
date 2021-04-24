@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的助学金申请</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/icon.css">
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="js/jquery.form.min.js">
+    </script>
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.easyui.min.js">
+    </script>
+</head>
+<body>
+
+<table id="grantApplication" class="easyui-datagrid" style="width: 100%">
+    <thead>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<input type="hidden" th:value="${userNum}" id="userNum">
+<script>
+    $(function () {
+        var userNum = $("#userNum").val();
+        $('#grantApplication').datagrid({
+            url:"user/show/grant/application/"+userNum,
+            columns:[[
+                {field:'userNum',title:'学号',width:100},
+                {field:'userName',title:'姓名',width:100},
+                {field:'userGrantApplicationTime',title:'申请时间',width:100},
+                {field:'userGrantApplicationMoney',title:'申请金额',width:100},
+                {field:'userGrantApplicationReason',title:'申请理由',width:350},
+                {field:'userPovertyIdentificationState',title:'申请状态',width:100,align:'right'},
+            ]]
+        });
+    });
+</script>
+</body>
+</html>

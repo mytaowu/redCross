@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加我们家庭成员的个人信息</title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.5/themes/icon.css">
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="js/jquery.form.min.js">
+    </script>
+    <script type="text/javascript" src="jquery-easyui-1.5/jquery.easyui.min.js">
+    </script>
+    <STYLE>
+        input{
+            border: 0;
+            border: 1px solid #cccccc;
+        }
+    </STYLE>
+
+</head>
+<body>
+<form id="addFamilyItemInfoForm" method="post" action="user/add/poverty/identification">
+    <div class="inner" style="text-align: center">
+        <div style="margin: 20px 0";>
+            <label>姓名:</label>
+            <input required name="userItemName" class="easyui-validatebox" data-options="validType:'chinese'"
+                    style="width:300px">
+        </div>
+        <div style="margin: 20px 0;">
+            <label>年龄:</label>
+            <input required name="userItemAge" class="easyui-validatebox" data-options="validType:'integer'"
+                    style="width:300px">
+        </div>
+
+        <div style="margin: 20px 0;">
+            <label>关系:</label>
+            <select required class="easyui-combobox" name="userContact" style="width:300px;">
+                <option selected value="父子">父子</option>
+                <option value="母子">母子</option>
+                <option value="兄弟姐妹">兄弟姐妹</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+
+
+        <div style="margin: 20px 0;">
+            <label>工作单位:</label>
+            <input required name="userItemCompany" class="easyui-validatebox" data-options="validType:'integer'"
+                   style="width:300px">
+        </div>
+
+
+        <div style="margin: 20px 0;">
+            <label>工作:</label>
+            <input required name="userItemJob" class="easyui-validatebox" data-options="validType:'integer'"
+                   style="width:300px">
+        </div>
+
+        <div style="margin: 20px 0;">
+            <label>年收入:</label>
+            <select required class="easyui-combobox" name="userItemIncome" style="width:300px;">
+                <option value="8000以下">8000以下</option>
+                <option value="8000-2w">8000-2w</option>
+                <option value="2-5w">2-5w</option>
+                <option value="5w-8w">5w-8w</option>
+                <option value="8w以上">8w以上</option>
+            </select>
+        </div>
+
+
+        <div style="margin: 20px 0;">
+            <label>健康情况:</label>
+            <select required class="easyui-combobox" name="userHealth" style="width:300px;">
+                <option selected value="无欠债">健康</option>
+                <option  value="8000以下">轻度残疾</option>
+                <option value="8000-2w">重度残疾</option>
+                <option value="2-5w">其他（在申请理由中进行说明）</option>
+            </select>
+        </div>
+        <input type="hidden" th:value="${userNum}" name="userNum">
+        <input  id="submit" type="button"  value="点击保存">
+    </div>
+</form>
+
+<script>
+    $(function () {
+        //发送表单ajax请求
+        $('#submit').on('click',function() {
+            $.ajax({
+                url: "/user/add/family/item/info",
+                type: "POST",
+                data: JSON.stringify($('#addFamilyItemInfoForm').serializeObject()),
+                contentType: "application/json",  //缺失会出现URL编码，无法转成json对象
+                success: function (res) {
+                    alert(res.message);
+                }
+            });
+        });
+        /**
+         * 自动将form表单封装成json对象
+         */
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    });
+</script>
+</body>
+</html>
